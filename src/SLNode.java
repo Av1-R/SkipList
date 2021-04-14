@@ -36,17 +36,17 @@ class SLNode {
 		if(sList!=null) {
 			if(sList.data == key) {return sList;}
 			else {
-				SLNode top = sList;
-				SLNode level = top;
+				SLNode level = sList;
 				
 				//Iterate levels, starting from top
 				for(; level != null; level = level.down) {
-					
+					System.out.println("level=" + level.level);
 					SLNode tmp = level;
 
 					//Iterate through skip list
-					while(tmp != null && tmp.data !=key && tmp.next != null) {
+					while(tmp.next.data < key && tmp.next != null) {
 						tmp = tmp.next;
+						System.out.println(tmp.data);
 						if(tmp.data == key) {return tmp;}
 					}
 				}
@@ -82,7 +82,45 @@ class SLNode {
 		// node that is less than, and before the node that is greater than toBeInserted'
 		// Do not insert if toBeInserted is already in the list.
 		// (3) add the down links as appropriate..
-				
+		//Iterate levels, starting from top
+		if(sList!=null && topLevel <= sList.level+1) {
+				if(sList.searchFirstExact(sList, toBeInserted)!=null) {return null;}
+				else {
+					SLNode update = new SLNode();
+					System.out.println(toBeInserted);
+					SLNode level = sList;
+					SLNode insertHere = new SLNode();
+					
+					//Iterate levels, starting from top
+					for(; level != null; level = level.down) {
+						System.out.println("level=" + level.level);
+						SLNode tmp = level;
+
+						//Iterate through skip list
+						while(tmp.next.data < toBeInserted && tmp.next != null) {
+							tmp = tmp.next;
+							insertHere = tmp;
+							System.out.println(tmp.data);
+							System.out.println(insertHere.data);
+							
+						}
+						update.next = tmp;
+					}
+					//insertHere.next is where key should be inserted
+					insertHere = insertHere.next;
+					if(insertHere ==  null || insertHere.data != toBeInserted) {
+						if(topLevel > sList.level) {
+							update = sList;
+							sList.level = topLevel;
+						}
+					}
+					System.out.println(insertHere.data);
+					System.out.println("test");
+
+				}
+			}
+		
+		
 		return null;
 	}
 	
@@ -116,6 +154,30 @@ class SLNode {
 	 
 	 int findLastLevel(int lvl) { //ToDo -- P level
 		 // POST: returns the value in the last node on level lvl
+		 if(top!=null) {
+		
+					SLNode level = top;
+					
+					//Iterate levels, starting from top
+					for(; level != null; level = level.down) {
+						System.out.println("level=" + level.level);
+						
+						SLNode tmp = level;
+
+						//Iterate through skip list
+						while(tmp.next != null && tmp.next.data) {
+							//System.out.println(tmp.down);
+							//System.out.println(tmp.data);
+							tmp = tmp.next;
+							System.out.println(tmp.data);
+
+							if(tmp.data == key) {return tmp;}
+						
+					}
+				}
+
+			}
+
 		 
 		 return -1;
 	 }
