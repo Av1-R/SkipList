@@ -122,15 +122,17 @@ class SLNode {
 					if(topLevel > sList.level) {
 						SLNode dummy = new SLNode();
 						dummy.level = sList.level + 1;
+						dummy.down = sList;
 						sList = dummy;
 					}
 					
-
+				
 					//Iterate levels, starting from top
 					SLNode tmp = sList;
 					for(int i = sList.level; i >= 0; i--) {
 						System.out.println("tmp level=" + tmp.level);
 						System.out.println("tmp data= " + tmp.data);
+						
 			
 						//Iterate through skip list
 						while(tmp.next != null && tmp.next.data < toBeInserted) {
@@ -175,6 +177,7 @@ class SLNode {
 							sList.level = topLevel;
 						}
 						SLNode newNode = new SLNode(toBeInserted);
+						sList.next = newNode;
 						ArrayList<SLNode> newNodes = new ArrayList<SLNode>(); 
 						newNodes.add(newNode);
 						
@@ -203,7 +206,7 @@ class SLNode {
 						//rearrange pointers after newNode
 						tmp = sList;
 						for(int i = 0; i <= sList.level; i++) {
-							if(i < newNodes.size()) {
+							if(i < newNodes.size()-1 && i < updateArr2.size()-1 && i < updateArr.size()-1) {
 								newNodes.get(i).next = updateArr2.get(i).next;
 								updateArr.get(i).next = newNode;
 							}
@@ -211,44 +214,13 @@ class SLNode {
 						}
 						int i = 0;
 						for(SLNode n : newNodes) {
-							n.next = updateArr2.get(i);
+							if(i < newNodes.size()-1) {
+								n.next = updateArr2.get(i);
+							}
+		
 							i++;
 						}
 						
-						
-						//Iterate levels, starting from top
-						/*for(int i = sList.level; i >= 0; i--) {
-							System.out.println("level=" + tmp.level);
-							int j = 0;
-							//Iterate through skip list
-							while(tmp.next != null) {
-								System.out.println(updateArr.get(j).next.data + " next");
-							
-								newNode.next = updateArr.get(j).next;
-								j++;
-								tmp = tmp.next;
-								System.out.println(tmp.data + " iter");
-							}
-							tmp = tmp.down;
-						}
-						update.printList(newNode);
-						
-						//Rearranges pointers before newNode
-						/*for (SLNode n : updateArr) {
-							n.next = newNode;
-						
-						}*/
-						//update.printList(sList);
-						/*for (SLNode n : updateArr2) {
-							newNode.next = n;
-							System.out.println(n.level + " =Node level, " + n.data + " Node data");
-							if(n.next != null) {
-								System.out.println(n.next.level + " =Node level, " + n.next.data + " Node data");
-
-							}else {System.out.println("NULL");}
-
-							System.out.println("test");
-						}*/
 						update.printList(sList);
 
 						
