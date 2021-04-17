@@ -103,7 +103,7 @@ public class skipListClient {
 		// Level 0: -1 (dummy), 3, 5, 7, 9
 		
  		SkipList skList = new SkipList(skipListClient.createBasicTestList());
- 		skList.top.insert(skList.top, 1, skList.top.level);
+ 		skList.top.insert(skList.top, 4, 0);
  		//SLNode tmp = skList.top.searchFirstExact(skList.top, 9);
  
 
