@@ -41,7 +41,7 @@ public class AssignmentTests {
 	       
 	       SLNode temp= skList.top;
 	       
-	       skList.top= temp.insert(temp, 1, 0); // insert value 1 on the bottom layer only
+	       temp.insert(temp, 1, 0); // insert value 1 on the bottom layer only
 	       
 	       // Check inserted on the bottom level
 	       
