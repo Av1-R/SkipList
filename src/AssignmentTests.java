@@ -30,18 +30,14 @@ public class AssignmentTests {
 	       assertFalse(skList.validate());
 		}
 	@Test
-	public void testInsert() {  
-		// Level 2: -1 (dummy),       7	
-		// Level 1: -1 (dummy), 3,    7
-		// Level 0: -1 (dummy), 3, 5, 7, 9
-		
+	public void testInsert() {     
 	       SkipList skList = new SkipList(createBasicTestList());
 	       
 	       // Easy insert: only insert on the bottom layer
 	       
 	       SLNode temp= skList.top;
 	       
-	       temp.insert(temp, 1, 0); // insert value 1 on the bottom layer only
+	       skList.top= temp.insert(temp, 1, 0); // insert value 1 on the bottom layer only
 	       
 	       // Check inserted on the bottom level
 	       
