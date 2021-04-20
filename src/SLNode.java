@@ -215,39 +215,18 @@ class SLNode {
 						}
 						System.out.println("----- END UPDATE ARR ----");
 						
-						int idx = 0;
-						for(SLNode n : newNodes) {
-							n.next = ;
-							
-						}
-						
+					
+					
 						for(int i = 0; i < updateArr.size(); i++) {
-							
+							updateArr.get(i).next = newNodes.get(i);
 							
 						}
-						
-
-						/*rearrange pointers after newNode
-						tmp = sList;
-						for(int i = 0; i <= sList.level; i++) {
-							if(i < newNodes.size()-1 && i < updateArr2.size()-1 && i < updateArr.size()-1) {
-								newNodes.get(i).next = updateArr2.get(i).next;
-								updateArr.get(i).next = newNode;
-							}
-
+						for(int i = 0; i < updateArr2.size(); i++) {
+							System.out.println(newNodes.get(i).data + " newNode");
+							System.out.println(updateArr2.get(i).data + " upd");
+							newNodes.get(i).next = 	updateArr2.get(i);
+							
 						}
-
-						System.out.println(newNodes.size());
-						int i = 0;
-						for(SLNode n : newNodes) {
-							if(i < newNodes.size()) {
-								n.next = updateArr2.get(i);
-								System.out.println(n.level + " " + n.data);
-								System.out.println(updateArr2.get(i).level + " upd2 " + updateArr2.get(i).data);
-							}
-		
-							i++;
-						}*/
 						
 						update.printList(sList);
 
