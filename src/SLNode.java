@@ -253,7 +253,7 @@ class SLNode {
 			}
 		
 		
-		return null;
+		return sList;
 	}
 	
 	SLNode remove(SLNode sList, int toBeRemoved) { // ToDo D/HD Level
