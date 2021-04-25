@@ -84,8 +84,7 @@ class SLNode {
 		// the value of key, and any non-reachable item has data value strictly
 		// less than the key.
 		// Returns null if there is no such node.
-	
-		return null;
+		return sList;
 	}
 	
 
@@ -210,7 +209,8 @@ class SLNode {
 		// Post : returns the first node of the skip list with any nodes containing values equal to
 		// toBeRemoved removed (i.e. on every level)
 		//The returned list should contain all other nodes and must be valid.
-		return null;
+
+		return sList;
 	}
 }
 
@@ -410,7 +410,8 @@ class SLNode {
 	 int[] subsequence(int start, int end ){ // ToDo D/HD level
 		 // POST:  Returns the (increasing) sorted array of all nodes drawn from (bottom level of original list)
 		 // such that all the nodes have data at least value start and at most value end
-		 return null;	 
+		 int[] arr = {1,2,3};
+		 return arr;	 
 	 }
 	 
 	 
@@ -433,7 +434,6 @@ class SLNode {
 				System.out.println(count);
 			 	return count;
 			}
-		 
 		 return 0;
 	 }	
  }
