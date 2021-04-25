@@ -1,4 +1,4 @@
-
+import java.util.*;
 public class skipListClient {
 	
 	public static SLNode createBasicTestList(){
@@ -105,14 +105,17 @@ public class skipListClient {
  		SkipList skList = new SkipList(skipListClient.createBasicTestList());
  	    SLNode temp= skList.top;
 	       
-	    skList.top= temp.insert(temp, 10, 3); // insert value 1 on the bottom layer only
+	  //  skList.top= temp.insert(temp, 10, 3); // insert value 1 on the bottom layer only
 	   
 	    temp.printList(skList.top);
 	  //  skList.top.level = 1;
 	    System.out.println(skList.validate());
 	    
-	    SLNode searchTest = skList.top.searchFirstExact(skList.top, 7);
+	    SLNode searchTest = skList.top.searchFirstExact(skList.top, 9);
 	    System.out.println(searchTest.data + " searchFirstExact OUT");
+	    
+	    int[] arr = skList.findShortestPath(7);
+	    System.out.println("SHORTEST= " + Arrays.toString(arr));
  		//SLNode tmp = skList.top.searchFirstExact(skList.top, 9);
  
 

@@ -59,39 +59,24 @@ class SLNode {
 		if(sList!=null) {
 			if(sList.data == key) {return sList;}
 			else {
-				SLNode level = sList;
+			
 				SLNode i = sList;
-				while(i != null && i.next != null && i.down != null) {
-					if(i.next != null && key > i.next.data) {
+				while(i.next != null) {
+					//Move to next node on same level
+					if(key >= i.next.data) {
 						i = i.next;
-						System.out.println(i.data + "traverse horiz");
-						if(i.next.data == key) {System.out.println(i.data + " toBeRet");return i.next;}
+						if(i.next != null && i.next.data == key) {return i.next;}
+						
+					}else {
+						//Move to node down a level
+						if(i.down != null) {
+							i = i.down;
+							if(i.next.data == key) {return i.next;}
+						}
 					}
-					if(i.down != null && key < i.next.data) {
-						i = i.down;
-						System.out.println(i.data + "traverse vert");
-						if(i.next.data == key) {System.out.println(i.data + " toBeRet");return i.next;}
-					}
-					if(i.data == key) {System.out.println(i.data + " toBeRet");return i;}
-
-
 				}
-				System.out.println("found");
-				
-				//Iterate levels, starting from top
-				/*for(; level != null; level = level.down) {
-					System.out.println("level=" + level.level);
-					SLNode tmp = level;
+				return i;
 
-					//Iterate through skip list
-					//maybe <= key
-					while(tmp != null && tmp.data < key && tmp.next != null) {
-						tmp = tmp.next;
-						System.out.println(tmp.data +" data");
-
-						if(tmp.data == key) {return tmp;}
-					}
-				}*/
 			}
 
 		}
@@ -126,17 +111,15 @@ class SLNode {
 		// (3) add the down links as appropriate..
 		//Iterate levels, starting from top
 		if(sList!=null && topLevel <= sList.level+1) {
-			//SLNode checkExists = sList.searchFirstExact(sList, toBeInserted);
-			//System.out.println(checkExists.data + "first check!");
+			SLNode checkExists = sList.searchFirstExact(sList, toBeInserted);
 			
-			//if(checkExists.data == toBeInserted) {return sList;}
+			if(checkExists.data == toBeInserted) {return sList;}
 			
 			SLNode update = new SLNode();
 			//Contains nodes to be connected to toBeInserted
 			ArrayList<SLNode> updateArr = new ArrayList<SLNode>();
 			//Contains nodes that toBeInserted connects to
 			ArrayList<SLNode> updateArr2 = new ArrayList<SLNode>();
-			System.out.println(toBeInserted + " val to be inserted");
 			
 			//Create new level if topLevel is greater than sList highest level
 			if(topLevel > sList.level) {
@@ -146,12 +129,9 @@ class SLNode {
 				sList = dummy;
 			}
 			
-		
 			//Iterate levels, starting from top
 			SLNode tmp = sList;
 			for(int i = sList.level; i >= 0; i--) {
-				System.out.println("tmp level=" + tmp.level);
-				System.out.println("tmp data= " + tmp.data);
 				
 				//Iterate through skip list
 				while(tmp.next != null && tmp.next.data < toBeInserted) {
@@ -179,8 +159,6 @@ class SLNode {
 				tmp = tmp.down;
 			}
 								
-			//insertHere.next is where key should be inserted
-			//System.out.println(tmp.data +" insert here");
 			if(tmp ==  null || tmp.data != toBeInserted) {
 				if(topLevel > sList.level) {
 					for(int i = sList.level+1; i < topLevel+1; i++) {
@@ -199,37 +177,9 @@ class SLNode {
 					newNodes.add(newNode);
 				}
 				
-				//Collections.reverse(newNodes);
+				//Sort for iteration
 				Collections.reverse(updateArr2);
 				Collections.reverse(updateArr);
-				
-				//debug new nodes 
-				/*
-				System.out.println("----- PRINTING NEW NODES----");
-				for (SLNode n : newNodes) {
-					System.out.println(n.level + " =New Nodes level, " + n.data + " New Nodes data");
-				}
-				System.out.println("----- END PRINTING UPDATE ARR 1----");
-				
-				System.out.println("----- PRINTING UPDATE ARR 1----");
-				for (SLNode n : updateArr) {
-					System.out.println(n.level + " =Node level, " + n.data + " Node data");
-					
-				}
-				System.out.println("----- END UPDATE ARR ----");
-				
-				System.out.println("----- PRINTING UPDATE ARR 2----");
-
-
-				for (SLNode n : updateArr2) {
-					System.out.println(n.level + " =Node level, " + n.data + " Node data");
-	
-					if(n.next != null) {
-						//System.out.println(n.next.level + " =Next Node level, " + n.next.data + " Next Node data");
-					}
-					
-				}
-				System.out.println("----- END UPDATE ARR ----");*/
 				
 				//Update all pointers
 				if(newNodes.size() > updateArr.size()) {
@@ -310,6 +260,15 @@ class SLNode {
 		 return -1;
 	 }
 	 
+	 int[] buildArrFromList(ArrayList<Integer> arr) {
+		 int[] toBeReturned = new int[arr.size()];
+		 for(int i = 0; i < arr.size(); i++) {
+			 toBeReturned[i] = arr.get(i).intValue();
+		 }
+		 System.out.println("builder out= " + Arrays.toString(toBeReturned));
+		 return toBeReturned;
+	 }
+	 
 	 int[] findShortestPath(int key) { // ToDo -- CR level
 		 // POST: Returns the array of node values (including dummy values) on any shortest path from
 		 // the current top node to any node containing data value key on the bottom level		 
@@ -317,6 +276,53 @@ class SLNode {
 		 
 		 // Note: in general there could be more than one shortest path. In the final
 		 // testing this case will not arise.
+		 int[] toBeReturned;
+		 if(this.top!=null) {
+			ArrayList<Integer> arr = new ArrayList<Integer>(); 
+			
+			if(this.top.next.data == key) {
+				arr.add(this.top.next.data);
+				toBeReturned = buildArrFromList(arr);
+				return toBeReturned;
+			}
+			else {
+			
+				SLNode i = this.top;
+				while(i.next != null) {
+					
+					//Move to next node on same level
+					if(key >= i.next.data) {
+						System.out.println("running " + i.data);
+						arr.add(i.data);
+						i = i.next;
+						if(i.next != null && i.next.data == key) {
+							
+							toBeReturned = buildArrFromList(arr);
+							return toBeReturned;
+						}
+						
+					}else {
+						//Move to node down a level
+						if(i.down != null) {
+							System.out.println("running" + i.data);
+							arr.add(i.data);
+							i = i.down;
+							if(i.next.data == key) {
+								toBeReturned = buildArrFromList(arr);
+								return toBeReturned;
+							}
+						}
+					}
+				}
+				System.out.println("Shortest path= " + arr.toString());
+				
+			}
+
+		}
+		 
+		 
+		 
+		 
 		return null; 
 	 }
 	 
@@ -376,6 +382,8 @@ class SLNode {
 			 	return isValid;
 			}
 
+	 
+		 
 		 return isValid;
 	 }
 	 
