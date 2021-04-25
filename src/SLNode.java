@@ -286,7 +286,6 @@ class SLNode {
 						}
 						if(tmp != null && tmp.next == null || tmp.next.data > key) {
 							tmp = tmp.down;
-							System.out.println(tmp.data);
 							arr.add(tmp.data);
 						}else {
 							arr.add(tmp.data);
@@ -310,8 +309,24 @@ class SLNode {
 		 // POST: Returns the length of the shortest path from 
 		 // the current top node to any node containing data value key on the bottom level.
 		 // Returns 0 if there is no such node whose data value matches key
-		return 0; 
-
+		 int count = 1;
+		 if(this.top!=null) {
+			SLNode tmp = this.top;
+			while(tmp.data != key){
+				if(tmp.next == null && tmp.down == null) {
+					break;
+				}
+				if(tmp.next == null || tmp.next.data > key) {
+					count++;
+					tmp = tmp.down;
+				}else {
+					count++;
+					tmp = tmp.next;}
+				if(tmp == null) {return 0;}
+			}
+			if(tmp.data == key && tmp.level != 0) {return count;}
+		 }
+		 return count; 
 	 }
 	 
 	 
