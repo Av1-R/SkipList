@@ -94,6 +94,10 @@ public class AssignmentTests {
  		first= inputList.searchFirstExact(inputList, 5); // search for 5
  		
  		assertEquals(first.level, 0); // find it first on level 0
+ 		
+ 		first= inputList.searchFirstExact(inputList, 9); // search for 9
+ 		
+ 		assertEquals(first.level, 0); // find it first on level 0
  	}
 
 	

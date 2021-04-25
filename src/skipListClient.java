@@ -114,8 +114,8 @@ public class skipListClient {
 	    SLNode searchTest = skList.top.searchFirstExact(skList.top, 9);
 	    System.out.println(searchTest.data + " searchFirstExact OUT");
 	    
-	    int[] arr = skList.findShortestPath(7);
-	    System.out.println("SHORTEST= " + Arrays.toString(arr));
+	    //int[] arr = skList.findShortestPath(9);
+	    //System.out.println("SHORTEST= " + Arrays.toString(arr));
  		//SLNode tmp = skList.top.searchFirstExact(skList.top, 9);
  
 

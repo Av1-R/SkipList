@@ -59,24 +59,18 @@ class SLNode {
 		if(sList!=null) {
 			if(sList.data == key) {return sList;}
 			else {
-			
-				SLNode i = sList;
-				while(i.next != null) {
-					//Move to next node on same level
-					if(key >= i.next.data) {
-						i = i.next;
-						if(i.next != null && i.next.data == key) {return i.next;}
-						
-					}else {
-						//Move to node down a level
-						if(i.down != null) {
-							i = i.down;
-							if(i.next.data == key) {return i.next;}
-						}
+				SLNode tmp = sList;
+				while(tmp.data != key){
+					if(tmp.next == null && tmp.down == null) {
+						break;
 					}
+					if(tmp.next == null || tmp.next.data > key) {
+						tmp = tmp.down;
+					}else {tmp = tmp.next;}
+					if(tmp == null) {return sList;}
 				}
-				return i;
-
+				if(tmp.data == key) {return tmp;}
+			
 			}
 
 		}
@@ -276,53 +270,39 @@ class SLNode {
 		 
 		 // Note: in general there could be more than one shortest path. In the final
 		 // testing this case will not arise.
-		 int[] toBeReturned;
 		 if(this.top!=null) {
 			ArrayList<Integer> arr = new ArrayList<Integer>(); 
-			
 			if(this.top.next.data == key) {
 				arr.add(this.top.next.data);
-				toBeReturned = buildArrFromList(arr);
-				return toBeReturned;
+				return buildArrFromList(arr);
 			}
 			else {
-			
-				SLNode i = this.top;
-				while(i.next != null) {
-					
-					//Move to next node on same level
-					if(key >= i.next.data) {
-						System.out.println("running " + i.data);
-						arr.add(i.data);
-						i = i.next;
-						if(i.next != null && i.next.data == key) {
-							
-							toBeReturned = buildArrFromList(arr);
-							return toBeReturned;
+				SLNode checkExists = this.top.searchFirstExact(this.top, key);
+				if(checkExists.data == key) {
+					SLNode tmp = this.top;
+					while(tmp.data != key){
+						if(tmp.next == null && tmp.down == null) {
+							break;
 						}
-						
-					}else {
-						//Move to node down a level
-						if(i.down != null) {
-							System.out.println("running" + i.data);
-							arr.add(i.data);
-							i = i.down;
-							if(i.next.data == key) {
-								toBeReturned = buildArrFromList(arr);
-								return toBeReturned;
-							}
+						if(tmp != null && tmp.next == null || tmp.next.data > key) {
+							tmp = tmp.down;
+							System.out.println(tmp.data);
+							arr.add(tmp.data);
+						}else {
+							arr.add(tmp.data);
+							tmp = tmp.next;
 						}
+						if(tmp == null) {return null;}
 					}
-				}
-				System.out.println("Shortest path= " + arr.toString());
-				
+					if(tmp.data == key) {
+						arr.add(tmp.data);
+						return this.buildArrFromList(arr);
+					}
+								
+				}else {return null;}		
 			}
 
 		}
-		 
-		 
-		 
-		 
 		return null; 
 	 }
 	 
