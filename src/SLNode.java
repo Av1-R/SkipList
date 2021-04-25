@@ -60,9 +60,26 @@ class SLNode {
 			if(sList.data == key) {return sList;}
 			else {
 				SLNode level = sList;
+				SLNode i = sList;
+				while(i != null && i.next != null && i.down != null) {
+					if(i.next != null && key > i.next.data) {
+						i = i.next;
+						System.out.println(i.data + "traverse horiz");
+						if(i.next.data == key) {System.out.println(i.data + " toBeRet");return i.next;}
+					}
+					if(i.down != null && key < i.next.data) {
+						i = i.down;
+						System.out.println(i.data + "traverse vert");
+						if(i.next.data == key) {System.out.println(i.data + " toBeRet");return i.next;}
+					}
+					if(i.data == key) {System.out.println(i.data + " toBeRet");return i;}
+
+
+				}
+				System.out.println("found");
 				
 				//Iterate levels, starting from top
-				for(; level != null; level = level.down) {
+				/*for(; level != null; level = level.down) {
 					System.out.println("level=" + level.level);
 					SLNode tmp = level;
 
@@ -70,11 +87,11 @@ class SLNode {
 					//maybe <= key
 					while(tmp != null && tmp.data < key && tmp.next != null) {
 						tmp = tmp.next;
-						System.out.println(tmp.data +" updated iter");
-						System.out.println("test");
+						System.out.println(tmp.data +" data");
+
 						if(tmp.data == key) {return tmp;}
 					}
-				}
+				}*/
 			}
 
 		}
@@ -109,150 +126,136 @@ class SLNode {
 		// (3) add the down links as appropriate..
 		//Iterate levels, starting from top
 		if(sList!=null && topLevel <= sList.level+1) {
-			SLNode checkExists = sList.searchFirstExact(sList, toBeInserted);
-			System.out.println(checkExists.data + "first check!");
+			//SLNode checkExists = sList.searchFirstExact(sList, toBeInserted);
+			//System.out.println(checkExists.data + "first check!");
 			
-			if(checkExists.data == toBeInserted) {return sList;}
+			//if(checkExists.data == toBeInserted) {return sList;}
 			
-			//else {
-				SLNode update = new SLNode();
-				//Contains nodes to be connected to toBeInserted
-				ArrayList<SLNode> updateArr = new ArrayList<SLNode>();
-				//Contains nodes that toBeInserted connects to
-				ArrayList<SLNode> updateArr2 = new ArrayList<SLNode>();
-				System.out.println(toBeInserted + " val to be inserted");
-				
-				//Create new level if topLevel is greater than sList highest level
-				if(topLevel > sList.level) {
-					SLNode dummy = new SLNode();
-					dummy.level = sList.level + 1;
-					dummy.down = sList;
-					sList = dummy;
-				}
-				
+			SLNode update = new SLNode();
+			//Contains nodes to be connected to toBeInserted
+			ArrayList<SLNode> updateArr = new ArrayList<SLNode>();
+			//Contains nodes that toBeInserted connects to
+			ArrayList<SLNode> updateArr2 = new ArrayList<SLNode>();
+			System.out.println(toBeInserted + " val to be inserted");
 			
-				//Iterate levels, starting from top
-				SLNode tmp = sList;
-				for(int i = sList.level; i >= 0; i--) {
-					System.out.println("tmp level=" + tmp.level);
-					System.out.println("tmp data= " + tmp.data);
-					
-		
-					//Iterate through skip list
-					while(tmp.next != null && tmp.next.data < toBeInserted) {
-						tmp = tmp.next;
-						System.out.println(tmp.data + " horiz iter");
-					}
-					updateArr.add(tmp);
-					tmp = tmp.down;
-				}
-	
-				tmp = sList;
-				for(int i = sList.level; i >= 0; i--) {
-					//Iterate through skip list
-
-					while(tmp != null && tmp.next != null && toBeInserted > tmp.next.data) {
-						tmp = tmp.next;
-						System.out.println(tmp.data + "!!!!");
-					}
-			
-					if(tmp.next != null) {
-						updateArr2.add(tmp.next);
-						System.out.println(tmp.next.data + "!!!!");
-					}
-					
-					tmp = tmp.down;
-				}
-				
-				//Check that update arrays are for correct level
-				
-
-				//insertHere.next is where key should be inserted
-				//System.out.println(tmp.data +" insert here");
-				if(tmp ==  null || tmp.data != toBeInserted) {
-					if(topLevel > sList.level) {
-						for(int i = sList.level+1; i < topLevel+1; i++) {
-							updateArr.set(i, sList);
-						}
-						sList.level = topLevel;
-					}
-					SLNode newNode = new SLNode(toBeInserted);
-					
-					ArrayList<SLNode> newNodes = new ArrayList<SLNode>(); 
-					newNodes.add(newNode);
-					
-					//Create new node with new nodes with correct topLevel
-					for(int i = 0; i < topLevel; i++) {
-						newNode = new SLNode(newNode);
-						newNodes.add(newNode);
-					}
-					
-					//Collections.reverse(newNodes);
-					Collections.reverse(updateArr2);
-					Collections.reverse(updateArr);
-					
-					//debug new nodes
-					System.out.println("----- PRINTING NEW NODES----");
-					for (SLNode n : newNodes) {
-						System.out.println(n.level + " =New Nodes level, " + n.data + " New Nodes data");
-					}
-					System.out.println("----- END PRINTING UPDATE ARR 1----");
-					
-					System.out.println("----- PRINTING UPDATE ARR 1----");
-					for (SLNode n : updateArr) {
-						System.out.println(n.level + " =Node level, " + n.data + " Node data");
-						
-					}
-					System.out.println("----- END UPDATE ARR ----");
-					
-					System.out.println("----- PRINTING UPDATE ARR 2----");
-
-
-					for (SLNode n : updateArr2) {
-						System.out.println(n.level + " =Node level, " + n.data + " Node data");
-		
-						if(n.next != null) {
-							//System.out.println(n.next.level + " =Next Node level, " + n.next.data + " Next Node data");
-						}
-						
-					}
-					System.out.println("----- END UPDATE ARR ----");
-					
-				
-					if(newNodes.size() > updateArr.size()) {
-						for(int i = 0; i < updateArr.size(); i++) {
-							updateArr.get(i).next = newNodes.get(i);	
-						}
-					}else {
-						for(int i = 0; i < newNodes.size(); i++) {
-							updateArr.get(i).next = newNodes.get(i);	
-						}
-					}
-					if(newNodes.size() > updateArr2.size()) {
-						for(int i = 0; i < updateArr2.size(); i++) {
-							System.out.println(newNodes.get(i).data + " newNode");
-							System.out.println(updateArr2.get(i).data + " upd");
-							newNodes.get(i).next = 	updateArr2.get(i);
-							
-						}
-					}else {
-						for(int i = 0; i < newNodes.size(); i++) {
-							System.out.println(newNodes.get(i).data + " newNode");
-							System.out.println(updateArr2.get(i).data + " upd");
-							newNodes.get(i).next = 	updateArr2.get(i);
-							
-						}
-					}
-					
-					update.printList(sList);
-
-					
-				}
-		
-				
+			//Create new level if topLevel is greater than sList highest level
+			if(topLevel > sList.level) {
+				SLNode dummy = new SLNode();
+				dummy.level = sList.level + 1;
+				dummy.down = sList;
+				sList = dummy;
 			}
+			
 		
+			//Iterate levels, starting from top
+			SLNode tmp = sList;
+			for(int i = sList.level; i >= 0; i--) {
+				System.out.println("tmp level=" + tmp.level);
+				System.out.println("tmp data= " + tmp.data);
+				
+				//Iterate through skip list
+				while(tmp.next != null && tmp.next.data < toBeInserted) {
+					tmp = tmp.next;
+					System.out.println(tmp.data + " horiz iter");
+				}
+				updateArr.add(tmp);
+				tmp = tmp.down;
+			}
+
+			tmp = sList;
+			for(int i = sList.level; i >= 0; i--) {
+				//Iterate through skip list
+
+				while(tmp != null && tmp.next != null && toBeInserted > tmp.next.data) {
+					tmp = tmp.next;
+					System.out.println(tmp.data + "!!!!");
+				}
 		
+				if(tmp.next != null) {
+					updateArr2.add(tmp.next);
+					System.out.println(tmp.next.data + "!!!!");
+				}
+				
+				tmp = tmp.down;
+			}
+								
+			//insertHere.next is where key should be inserted
+			//System.out.println(tmp.data +" insert here");
+			if(tmp ==  null || tmp.data != toBeInserted) {
+				if(topLevel > sList.level) {
+					for(int i = sList.level+1; i < topLevel+1; i++) {
+						updateArr.set(i, sList);
+					}
+					sList.level = topLevel;
+				}
+				SLNode newNode = new SLNode(toBeInserted);
+				
+				ArrayList<SLNode> newNodes = new ArrayList<SLNode>(); 
+				newNodes.add(newNode);
+				
+				//Create new node with new nodes with correct topLevel
+				for(int i = 0; i < topLevel; i++) {
+					newNode = new SLNode(newNode);
+					newNodes.add(newNode);
+				}
+				
+				//Collections.reverse(newNodes);
+				Collections.reverse(updateArr2);
+				Collections.reverse(updateArr);
+				
+				//debug new nodes 
+				/*
+				System.out.println("----- PRINTING NEW NODES----");
+				for (SLNode n : newNodes) {
+					System.out.println(n.level + " =New Nodes level, " + n.data + " New Nodes data");
+				}
+				System.out.println("----- END PRINTING UPDATE ARR 1----");
+				
+				System.out.println("----- PRINTING UPDATE ARR 1----");
+				for (SLNode n : updateArr) {
+					System.out.println(n.level + " =Node level, " + n.data + " Node data");
+					
+				}
+				System.out.println("----- END UPDATE ARR ----");
+				
+				System.out.println("----- PRINTING UPDATE ARR 2----");
+
+
+				for (SLNode n : updateArr2) {
+					System.out.println(n.level + " =Node level, " + n.data + " Node data");
+	
+					if(n.next != null) {
+						//System.out.println(n.next.level + " =Next Node level, " + n.next.data + " Next Node data");
+					}
+					
+				}
+				System.out.println("----- END UPDATE ARR ----");*/
+				
+				//Update all pointers
+				if(newNodes.size() > updateArr.size()) {
+					for(int i = 0; i < updateArr.size(); i++) {
+						updateArr.get(i).next = newNodes.get(i);	
+					}
+				}else {
+					for(int i = 0; i < newNodes.size(); i++) {
+						updateArr.get(i).next = newNodes.get(i);	
+					}
+				}
+				if(newNodes.size() > updateArr2.size()) {
+					for(int i = 0; i < updateArr2.size(); i++) {
+						newNodes.get(i).next = 	updateArr2.get(i);
+						
+					}
+				}else {
+					for(int i = 0; i < newNodes.size(); i++) {
+						newNodes.get(i).next = 	updateArr2.get(i);
+						
+					}
+				}
+				
+				update.printList(sList);	
+			}
+		}
 		return sList;
 	}
 	
@@ -286,18 +289,21 @@ class SLNode {
 	 
 	 int findLastLevel(int lvl) { //ToDo -- P level
 		 // POST: returns the value in the last node on level lvl
-		 if(top!=null) {
-		
-					SLNode level = top;
-					
-					//Iterate levels, starting from top
-					for(; level != null; level = level.down) {
-						System.out.println("level=" + level.level);
-						
-						SLNode tmp = level;
+		 if(this.top!=null) {
+			 
+				SLNode level = this.top;
+				//Iterate levels, starting from top
+				for(; level != null; level = level.down) {
+					SLNode tmp = level;
 
+					//Iterate through skip list
+					while(tmp != null && tmp.next != null) {
+						if(tmp.level == lvl && tmp.next.next == null) {
+							return tmp.next.data;
+						}
+						tmp = tmp.next;
+					}
 				}
-
 			}
 
 		 
@@ -328,12 +334,73 @@ class SLNode {
 		 // Otherwise returns false.
 		 //1. nodes a, b, c are reachable, same lvl number but strictly INCREASING data values
 		 
-		 return false;
+		 boolean isValid = true;
+		 if(this.top!=null) {
+			 	
+				SLNode level = this.top;
+		
+				//Iterate levels, starting from top
+				for(; level != null; level = level.down) {
+
+					//Check levels are desc in value and only a difference of 1
+					if(level.down != null && (level.level < level.down.level || 
+							level.level - level.down.level > 1)) {
+						isValid = false;
+					}
+					
+					SLNode prev;
+					SLNode tmp = level;
+
+					//Iterate through skip list horizontally
+					while(tmp != null && tmp.next != null) {
+						prev = tmp;
+						tmp = tmp.next;
+						
+						//Check if nodes on same level has increasing data values
+						if(prev.data > tmp.data || prev.level != tmp.level) {
+							isValid = false;
+						}
+						
+						//Check if nodes on level 0 have no down nodes
+						if(tmp.level == 0 && tmp.down != null) {
+							isValid = false;
+						}
+						
+						//Check if all nodes on levels >= 1 have a down node
+						if(tmp.level >= 1 && tmp.down == null) {
+							isValid = false;
+						}
+						
+					}
+				}
+			 	return isValid;
+			}
+
+		 return isValid;
 	 }
 	 
 	 int traverseAndAdd(int selectedLevel) { // ToDo -- P level		 
 		 // POST: Returns the sum of the non-negative-valued nodes on level equal to selectedLevel 
 		 // Return 0 if selected level does not appear in the list
+		 
+		 if(this.top!=null) {
+			 	int count = 0;
+				SLNode level = this.top;
+				//Iterate levels, starting from top
+				for(; level != null; level = level.down) {
+					SLNode tmp = level;
+
+					//Iterate through skip list
+					while(tmp != null && tmp.next != null) {
+						tmp = tmp.next;
+						if(level.level == selectedLevel && tmp.data >= 0) {
+							count += tmp.data;
+						}
+					}
+				}
+			 	return count;
+			}
+
 		 return 0;
 	 }
 	 
@@ -347,6 +414,23 @@ class SLNode {
 	 int countAllNodes() { // ToDo -- P level
 		 // POST:  Returns the total number of SLNodes in the current Skip List
 		 // (The count includes all "dummy" nodes at the start of each level.)
+		 if(this.top!=null) {
+			 	int count = 0;
+				SLNode level = this.top;
+				//Iterate levels, starting from top
+				for(; level != null; level = level.down) {
+					SLNode tmp = level;
+					count++;
+					//Iterate through skip list
+					while(tmp != null && tmp.next != null) {
+						tmp = tmp.next;
+						count++;
+					}
+				}
+				System.out.println(count);
+			 	return count;
+			}
+		 
 		 return 0;
 	 }	
  }

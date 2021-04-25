@@ -103,7 +103,16 @@ public class skipListClient {
 		// Level 0: -1 (dummy), 3, 5, 7, 9
 		
  		SkipList skList = new SkipList(skipListClient.createBasicTestList());
- 		skList.top.insert(skList.top, 4, 4);
+ 	    SLNode temp= skList.top;
+	       
+	    skList.top= temp.insert(temp, 10, 3); // insert value 1 on the bottom layer only
+	   
+	    temp.printList(skList.top);
+	  //  skList.top.level = 1;
+	    System.out.println(skList.validate());
+	    
+	    SLNode searchTest = skList.top.searchFirstExact(skList.top, 7);
+	    System.out.println(searchTest.data + " searchFirstExact OUT");
  		//SLNode tmp = skList.top.searchFirstExact(skList.top, 9);
  
 
