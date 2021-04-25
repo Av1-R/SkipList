@@ -272,35 +272,28 @@ class SLNode {
 		 // testing this case will not arise.
 		 if(this.top!=null) {
 			ArrayList<Integer> arr = new ArrayList<Integer>(); 
-			if(this.top.next.data == key) {
-				arr.add(this.top.next.data);
-				return buildArrFromList(arr);
-			}
-			else {
-				SLNode checkExists = this.top.searchFirstExact(this.top, key);
-				if(checkExists.data == key) {
-					SLNode tmp = this.top;
-					while(tmp.data != key){
-						if(tmp.next == null && tmp.down == null) {
-							break;
-						}
-						if(tmp != null && tmp.next == null || tmp.next.data > key) {
-							tmp = tmp.down;
-							arr.add(tmp.data);
-						}else {
-							arr.add(tmp.data);
-							tmp = tmp.next;
-						}
-						if(tmp == null) {return null;}
+			SLNode checkExists = this.top.searchFirstExact(this.top, key);
+			if(checkExists.data == key) {
+				SLNode tmp = this.top;
+				while(tmp.data != key){
+					if(tmp.next == null && tmp.down == null) {
+						break;
 					}
-					if(tmp.data == key) {
+					if(tmp != null && tmp.next == null || tmp.next.data > key) {
+						tmp = tmp.down;
 						arr.add(tmp.data);
-						return this.buildArrFromList(arr);
+					}else {
+						arr.add(tmp.data);
+						tmp = tmp.next;
 					}
-								
-				}else {return null;}		
-			}
-
+					if(tmp == null) {return null;}
+				}
+				if(tmp.data == key) {
+					arr.add(tmp.data);
+					return this.buildArrFromList(arr);
+				}
+							
+			}else {return null;}		
 		}
 		return null; 
 	 }
