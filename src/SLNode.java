@@ -48,9 +48,6 @@ class SLNode {
 		System.out.println("---------- END SKIPLIST ---------");
 	}
 
-		
-		
-	
 	
 	SLNode searchFirstExact (SLNode sList, int key) { //ToDo - P level
 		// Pre : sList is valid
@@ -376,23 +373,23 @@ class SLNode {
 		 // Return 0 if selected level does not appear in the list
 		 
 		 if(this.top!=null) {
-			 	int count = 0;
-				SLNode level = this.top;
-				//Iterate levels, starting from top
-				for(; level != null; level = level.down) {
-					SLNode tmp = level;
+			 	int sum = 0;
+				SLNode tmp = this.top;
 
-					//Iterate through skip list
-					while(tmp != null && tmp.next != null) {
+				while(tmp.next != null || tmp.level != selectedLevel) {
+					if(tmp.level != selectedLevel) {
+						tmp = tmp.down;
+					}
+	
+					if(tmp != null && tmp.level == selectedLevel) {
 						tmp = tmp.next;
-						if(level.level == selectedLevel && tmp.data >= 0) {
-							count += tmp.data;
-						}
+						sum+= tmp.data;
 					}
 				}
-			 	return count;
-			}
-
+				return sum;
+				
+		 }
+				
 		 return 0;
 	 }
 	 
@@ -414,7 +411,7 @@ class SLNode {
 				for(; level != null; level = level.down) {
 					SLNode tmp = level;
 					count++;
-					//Iterate through skip list
+					//Iterate through skip list horizontally
 					while(tmp != null && tmp.next != null) {
 						tmp = tmp.next;
 						count++;
