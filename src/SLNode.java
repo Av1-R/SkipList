@@ -137,16 +137,12 @@ class SLNode {
 
 			tmp = sList;
 			for(int i = sList.level; i >= 0; i--) {
-				//Iterate through skip list
-
 				while(tmp != null && tmp.next != null && toBeInserted > tmp.next.data) {
 					tmp = tmp.next;
-					System.out.println(tmp.data + "!!!!");
 				}
 		
 				if(tmp.next != null) {
 					updateArr2.add(tmp.next);
-					System.out.println(tmp.next.data + "!!!!");
 				}
 				
 				tmp = tmp.down;
@@ -195,8 +191,7 @@ class SLNode {
 						
 					}
 				}
-				
-				update.printList(sList);	
+				return sList;
 			}
 		}
 		return sList;
@@ -233,24 +228,18 @@ class SLNode {
 	 
 	 int findLastLevel(int lvl) { //ToDo -- P level
 		 // POST: returns the value in the last node on level lvl
-		 if(this.top!=null) {
-			 
-				SLNode level = this.top;
-				//Iterate levels, starting from top
-				for(; level != null; level = level.down) {
-					SLNode tmp = level;
-
-					//Iterate through skip list
-					while(tmp != null && tmp.next != null) {
-						if(tmp.level == lvl && tmp.next.next == null) {
-							return tmp.next.data;
-						}
+		 if(this.top != null) {
+				SLNode tmp = this.top;
+				while(tmp.level != lvl || tmp.next != null) {
+					if(tmp.next != null) {
 						tmp = tmp.next;
+					}else if(tmp.level != lvl && tmp.next == null) {
+						tmp = tmp.down;
 					}
 				}
-			}
-
-		 
+				return tmp.data;
+		 }
+		
 		 return -1;
 	 }
 	 
@@ -259,7 +248,6 @@ class SLNode {
 		 for(int i = 0; i < arr.size(); i++) {
 			 toBeReturned[i] = arr.get(i).intValue();
 		 }
-		 System.out.println("builder out= " + Arrays.toString(toBeReturned));
 		 return toBeReturned;
 	 }
 	 
@@ -330,9 +318,9 @@ class SLNode {
 		 
 		 boolean isValid = true;
 		 if(this.top!=null) {
-			 	
+			 	ArrayList<Integer> nonDummyNodes = new ArrayList<Integer>();
 				SLNode level = this.top;
-		
+				
 				//Iterate levels, starting from top
 				for(; level != null; level = level.down) {
 
@@ -349,8 +337,8 @@ class SLNode {
 					while(tmp != null && tmp.next != null) {
 						prev = tmp;
 						tmp = tmp.next;
-						
-						//Check if nodes on same level has increasing data values
+						nonDummyNodes.add(tmp.data);
+						//Check if nodes on same level have increasing data values
 						if(prev.data > tmp.data || prev.level != tmp.level) {
 							isValid = false;
 						}
@@ -367,11 +355,19 @@ class SLNode {
 						
 					}
 				}
-			 	return isValid;
-			}
-
-	 
-		 
+				//Check if dummy values exist at start of each level
+			 	level = this.top;
+			 	while(level != null) {
+			 		if(level.data != -1) {
+			 			isValid = false;
+			 		}
+			 		level = level.down;
+			 	}
+			 	//Check if non dummy nodes contain values at least = 0
+			 	for(Integer i : nonDummyNodes) {
+			 		if(i < 0) {isValid = false;}
+			 	}
+			}else {return false;}
 		 return isValid;
 	 }
 	 
@@ -424,7 +420,6 @@ class SLNode {
 						count++;
 					}
 				}
-				System.out.println(count);
 			 	return count;
 			}
 		 return 0;
